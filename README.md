@@ -1,6 +1,6 @@
 # Crypto
 
-### P1 is sample node .... P2 P3 are just copies of P1 with just different ports, So please refer P1 and try
+### P1 is sample node .... P2 P3 are just copies of P1 with just different ports, So please refer P1 and try because P2 and P3 may not be updated
 
 
 
