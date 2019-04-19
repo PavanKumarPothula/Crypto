@@ -20,12 +20,15 @@ here 10001 10002 10003
 
 
 >AN ALTERNATIVE FOR ABOVE STEP IS IT SENDS TO ALL NODES ONE BY ONE
->IT'S WON'T BE PROPER THIS WAY, FOR EXAMPLE, IN CASE OF BLOCKCHAIN which is one of the applications of our protocol, ALL NODES WILL MULTICAST THEIR VALUES NOT ONE-BY-ONE.
+
+>IT'S WON'T BE PROPER THIS WAY
+
+>FOR EXAMPLE, IN CASE OF BLOCKCHAIN which is one of the applications of our protocol, ALL NODES WILL MULTICAST THEIR VALUES NOT ONE-BY-ONE.
 
 3)Verify hash and print respective msg. (WILL BE DONE EASILY and WILL BE WORKING)
 
 
-YOU CAN
+## YOU CAN
           COMPLETE THIS PIECE OF CODE
           FIND AND TRY AN ALTERNATIVE FOR ANY STEP OF THIS CODE
           WRITE A WHOLE NEW CODE
@@ -40,5 +43,5 @@ YOU CAN
           
           
 ________________________________________________________________________
-## I WONT BE AVAILABLE TODAY AND MAY NOT BE TOMORROW because of a ceremony in my house.
-CAN CALL ME BUT NOT AT ODD TIMES FOR A FAMILY
+**I WONT BE AVAILABLE TODAY AND MAY NOT BE TOMORROW because of a ceremony in my house.
+CAN CALL ME BUT NOT AT ODD TIMES FOR A FAMILY**
