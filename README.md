@@ -12,7 +12,7 @@ here 10001 10002 10003
 2)P1 recvs msg and generates it hash (DONE and WORKING)
   and shares its hash TO ALL NODES AT ONE. (DONE something and NOT WORKING) --- check shareMyHash() in P1
 
-####The above step requires Multicast
+#### The above step requires Multicast
 
 
 #### THIS MULTICASTING CODE IS COMPLEX AS FUCK AND I COULDN'T GET ONE WORKING
