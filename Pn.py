@@ -3,7 +3,7 @@ import socket
 from _thread import *
 import threading
 
-msgs=["HI","HI","HI"]
+msgs=["HI","HEY","HELLO"]
 ports=[10001,10002,10003]
 def threaded(c):
     while True:

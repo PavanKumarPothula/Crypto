@@ -1,64 +1,82 @@
 import socket
 import time
-
+import threading 
 
 ports=[10001,10002,10003]
-
+MyPort=10001
 def getmsg():
-
+     global ports
+     global MyPort
 
      host=socket.gethostname()
-     port=10001
 
      s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-     s.bind((host,port))
-     print("socket binded to port",port)
+     s.bind((host,MyPort))
+     print("socket binded to port",MyPort)
 
      s.listen(5)
-     print("hmm, listening....")
+     print "hmm, listening...."
 
      c,addr=s.accept()
 
-     print("Connected to ",addr[0],':',addr[1])
+     print "Connected to ",addr[0],':',addr[1]
 
      msg = c.recv(1024)
 
-     print("Sender says: ",msg.decode('ascii'))
+     print "Sender says: ",msg.decode('ascii')
 
      if not msg:
-         print('Bye')
+         print 'Bye'
 
      c.send("Thanks mate".encode('ascii'))
 
      c.close()
 
-     time.sleep(0)
-
-     shareMyHash(hash(msg))
-
-     s.listen()
+     #time.sleep(0)
+     try:
+     #time.sleep(0)
+       #t1=thread.start_new_thread(shareMyHash, (hash(msg),)) 
+       #t2=thread.start_new_thread(listenToHashes, ()) 
+       t1 = threading.Thread(target=shareMyHash, args=(hash(msg),)) 
+       t2 = threading.Thread(target=listenToHashes, args=()) 
+     except Exception, e:
+        print e
+        print "something went wrong"
      
+     t1.start()
+     t2.start()
+     t1.join()
+     t2.join()
+     return 0
 
-def shareMyHash(m):
-
-    MCAST_GRP = 224.0.0.1
-    MCAST_PORT = 10000
-
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-    sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 32)
-    sock.sendto("Hello World", (MCAST_GRP, MCAST_PORT))
-
-
+def shareMyHash(msg):
+    global ports
+    global MyPort
 
 
+    UDP_IP = "127.0.0.1"
+
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 
+    for p in ports:
+        if p != MyPort:
+                print "sending my hash ",msg," to port ",p
+                sock.sendto(str(msg), (UDP_IP,p))
 
 
+def listenToHashes():
+    global ports
+    global MyPort
 
+ 
+    UDP_IP = "127.0.0.1"
+    UDP_PORT = MyPort
 
+    sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM) 
+    sock.bind((UDP_IP, UDP_PORT))
 
-
-
-
+    while True:
+        data, addr = sock.recvfrom(1024) 
+        print "received message:", data
 
 
 
