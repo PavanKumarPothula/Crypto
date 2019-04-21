@@ -4,9 +4,13 @@ import threading
 
 ports=[10001,10002,10003]
 MyPort=10003
+myMsg=""
+collectedHashes=[]
+
 def getmsg():
      global ports
      global MyPort
+     global myMsg
 
      host=socket.gethostname()
 
@@ -19,41 +23,64 @@ def getmsg():
 
      c,addr=s.accept()
 
-     print "Connected to ",addr[0],':',addr[1]
 
-     msg = c.recv(1024)
+     myMsg = c.recv(1024).decode('ascii')
 
-     print "Sender says: ",msg.decode('ascii')
+     print "Connected to ",addr[0]," : ",addr[1], "and it says ",myMsg
 
-     if not msg:
-         print 'Bye'
 
-     c.send("Thanks mate".encode('ascii'))
+'''''     s.close()
+     time.sleep(2)
+     collectedHashes=[]
+     for i in ports:
+        if i != MyPort:
+            collectedHashes.append(listenToHashes())
+        else:
+            shareMyHash(hash(msg))
 
-     c.close()
-
-     #time.sleep(0)
+'''''
+def startThreading():
+     global myMsg
+     global collectedHashes
      try:
      #time.sleep(0)
        #t1=thread.start_new_thread(shareMyHash, (hash(msg),)) 
        #t2=thread.start_new_thread(listenToHashes, ()) 
-       t1 = threading.Thread(target=shareMyHash, args=(hash(msg),)) 
+       t1 = threading.Thread(target=shareMyHash, args=())
        t2 = threading.Thread(target=listenToHashes, args=()) 
-     except Exception, e:
+     except Exception,e:
+        print "collected before death",collectedHashes
         print e
         print "something went wrong"
      
-     t1.start()
      t2.start()
+     t1.start()
      t1.join()
      t2.join()
+
      return 0
 
-def shareMyHash(msg):
+def shareMyHash():
     global ports
     global MyPort
+    global myMsg
 
+    msg=hash(myMsg)
 
+    host =socket.gethostname()
+    s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+
+    for port in ports:
+        if port != MyPort:
+
+                s.connect((host,port))
+                print("Tring to Send ",msg , " to " ,port )
+                s.send(str(msg).encode('ascii'))
+                print("Sent ",msg , " to " ,port )
+
+    print "Done sharing with em"    
+
+'''''
     UDP_IP = "127.0.0.1"
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 
@@ -61,13 +88,32 @@ def shareMyHash(msg):
         if p != MyPort:
                 print "sending my hash ",msg," to port ",p
                 sock.sendto(str(msg), (UDP_IP,p))
-
+'''''
 
 def listenToHashes():
     global ports
     global MyPort
+    global collectedHashes
+    
 
- 
+    host=socket.gethostname()
+    s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.bind((host,MyPort))
+    s.listen(len(ports))
+
+    c,addr=s.accept()
+
+#    print "Connected to ",addr[0],':',addr[1]
+
+    msg = c.recv(1024).decode('ascii')
+    collectedHashes.append(msg)
+    
+    print "Connected to ",addr[0]," : ",addr[1], "and it says ",msg
+    
+    c.close()
+    print "current list",collectedHashes
+
+''''' 
     UDP_IP = "127.0.0.1"
     UDP_PORT = MyPort
 
@@ -79,7 +125,7 @@ def listenToHashes():
         print "received message:", data
 
 
-
+'''''
 
 
 '''''    for port in ports:
@@ -130,3 +176,4 @@ def listenToHashes():
 '''''
 if __name__ == '__main__':
     getmsg()
+    startThreading()
