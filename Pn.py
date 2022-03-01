@@ -5,21 +5,6 @@ import threading
 
 msgs=["HI","HEY","HELLO"]
 ports=[10001,10002,10003]
-def threaded(c):
-    while True:
-
-        data = c.recv(1024)
-
-        print("Reciever says: ",data)
-
-        if not data:
-            print('Bye')
-            break
-
-        c.send(data)
-
-    c.close()
-
 
 def sender():
 
@@ -37,10 +22,6 @@ def sender():
 
          s.send(message.encode('ascii'))
          print("Sending ",message , " to " ,port )
-         data=s.recv(1024)
-
-         print('Received from the client :',str(data.decode('ascii')))
-
          s.close()
 
 
